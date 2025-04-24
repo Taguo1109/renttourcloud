@@ -1,5 +1,7 @@
 package com.spring.cloud.rentuser.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.cloud.common.dto.JsonResponse;
 import com.spring.cloud.common.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -60,7 +62,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-        // token 缺失或驗證失敗 -> 401 Unauthorized
+        // 若 token 無效或不存在，返回 401 JSON 格式錯誤訊息
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setContentType("application/json");
+        JsonResponse<String> response = JsonResponse.unauthorized("Invalid or missing JWT token");
+        String json = new ObjectMapper().writeValueAsString(response);
+        res.getWriter().write(json);
     }
 }

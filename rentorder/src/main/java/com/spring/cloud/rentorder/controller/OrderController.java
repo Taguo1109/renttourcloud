@@ -39,5 +39,10 @@ public class OrderController {
         return ResponseEntity.ok(orderId);
     }
 
+    @GetMapping("/test-error")
+    public String testError() {
+        throw new RuntimeException("測試錯誤");
+    }
+
 
 }

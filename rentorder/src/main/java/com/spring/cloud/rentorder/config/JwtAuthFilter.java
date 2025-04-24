@@ -1,5 +1,7 @@
 package com.spring.cloud.rentorder.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spring.cloud.common.dto.JsonResponse;
 import com.spring.cloud.common.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,44 +26,46 @@ import java.util.List;
  */
 
 /**
- * JwtAuthFilter extends OncePerRequestFilter
- * 用來在每次 HTTP 請求前：
- * 1. 從 Header 提取 “Authorization: Bearer <token>”
- * 2. 用 JwtUtil 驗證 token 是否有效
- * 3. 若有效，將 user 信息設置到 Spring SecurityContext
- * 4. 不通過則返回 401，不繼續調用好續 filter 或 controller
+ * JwtAuthFilter
+ * 1. 從 header 提取 token
+ * 2. 驗證 JWT
+ * 3. 設置 Spring Security 的上下文
+ * 4. 若失敗，回傳 401 + JSON 格式錯誤訊息
  */
 public class JwtAuthFilter extends OncePerRequestFilter {
+
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
                                     FilterChain chain)
             throws ServletException, IOException {
+        String header = req.getHeader("Authorization");
 
-        // 1. 讀取 Authorization header
-        String h = req.getHeader("Authorization");
-        if (h != null && h.startsWith("Bearer ")) {
+        if (header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
 
-            // 2. 獲取 token
-            String token = h.substring(7);
-
-            // 3. 驗證 token
+            // 驗證 token 是否有效
             if (JwtUtil.validateToken(token)) {
+                // 從 token 解析 username，這邊也可以解析更多資訊
+                String username = JwtUtil.getSubject(token);
 
-                // 4. 解析用戶身份
-                String user = JwtUtil.getSubject(token);
+                // 建立 Authentication 並設定到 SecurityContext
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
 
-                // 5. 構造 Authentication 對象，放進 SecurityContext
-                var auth = new UsernamePasswordAuthenticationToken(user, null, List.of());
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
 
-                // 6. 通過，調用下一個 filter / controller
+                // 放行請求
                 chain.doFilter(req, res);
                 return;
             }
         }
 
-        // token 缺失或驗證失敗 -> 401 Unauthorized
+        // 若 token 無效或不存在，返回 401 JSON 格式錯誤訊息
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setContentType("application/json");
+        JsonResponse<String> response = JsonResponse.unauthorized("Invalid or missing JWT token");
+        String json = new ObjectMapper().writeValueAsString(response);
+        res.getWriter().write(json);
     }
 }

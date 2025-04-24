@@ -1,0 +1,40 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                             https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!-- 指回你的 aggregator POM -->
+    <parent>
+        <groupId>com.spring.cloud</groupId>
+        <artifactId>renttourcloud</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <!-- let Maven pick ../pom.xml -->
+    </parent>
+
+    <artifactId>common</artifactId>
+    <packaging>jar</packaging>
+    <dependencies>
+        <!-- 只留 JWT 必要的 libs -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-api</artifactId>
+            <version>0.11.5</version>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-impl</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt-jackson</artifactId>
+            <version>0.11.5</version>
+            <scope>runtime</scope>
+        </dependency>
+    </dependencies>
+
+    <!-- 完全移除 spring-boot-maven-plugin -->
+</project>

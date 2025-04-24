@@ -1,4 +1,4 @@
-package com.spring.cloud.rentuser.config;
+package com.spring.cloud.rentorder.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -8,8 +8,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * ClassName: com.spring.cloud.rentuser.config.SecurityConfig
- * Package: com.spring.cloud.rentuser.config
+ * ClassName: com.spring.cloud.rentorder.config.SecurityConfig
+ * Package: com.spring.cloud.rentorder.config
  * Description:
  *
  * @Author 郭庭安

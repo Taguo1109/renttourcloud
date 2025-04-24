@@ -1,4 +1,4 @@
-package com.spring.cloud.rentuser.config;
+package com.spring.cloud.rentorder.config;
 
 import com.spring.cloud.common.util.JwtUtil;
 import jakarta.servlet.FilterChain;
@@ -13,8 +13,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * ClassName: com.spring.cloud.rentuser.config.JwtAuthFilter
- * Package: com.spring.cloud.rentuser.config
+ * ClassName: com.spring.cloud.rentorder.config.JwtAuthFilter
+ * Package: com.spring.cloud.rentorder.config
  * Description:
  *
  * @Author 郭庭安

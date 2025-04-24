@@ -2,6 +2,7 @@ package com.spring.cloud.rentuser.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -39,10 +40,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 // 2. 路由授權規則
                 .authorizeHttpRequests(auth -> auth
-                        // auth 路徑公開(登入註冊......)
-                        .requestMatchers("/auth/**").permitAll()
                         // 放行 Swagger 相關路徑
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html,").permitAll()
+                        // 允許所有 OPTIONS 請求，避免預檢請求被阻擋 (放行Token)
+                        // 瀏覽器會先發送一個 OPTIONS 預檢請求來確認 CORS 配置是否允許這樣的請求
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         // 其它所有請求需先通過認證
                         .anyRequest().authenticated()
                 )

@@ -4,10 +4,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
+import javax.crypto.SecretKey;
 
 /**
  * ClassName: com.spring.cloud.common.util.JwtUtil
@@ -26,11 +28,15 @@ public class JwtUtil {
     private static final String SECRET = "c9sPT-7U6J-zucbljw_MAl7iv1hlInJUfCTPHnGwBGs=";
     private static final long   EXP_HOURS = 24;
 
+    // 使用 Keys.hmacShaKeyFor 方法將字串金鑰轉換為 SecretKey
+    private static final SecretKey SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
+
     public static String generateToken(String subject) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(Date.from(Instant.now().plus(EXP_HOURS, ChronoUnit.HOURS)))
-                .signWith(SignatureAlgorithm.HS256, SECRET.getBytes())
+                // 使用 SecretKey 物件進行簽名
+                .signWith(SECRET_KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
 

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  rentauth:
+    build:
+      context: ./rentauth
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    networks:
+      - backend
+
+  rentuser:
+    build:
+      context: ./rentuser
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    networks:
+      - backend
+
+  rentorder:
+    build:
+      context: ./rentorder
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    networks:
+      - backend
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      # 把你寫好的 proxy.conf 掛到正確位置，Nginx 會自動載入這裡的 config！ 一定要是default.conf才會作用
+      - ./docker-compose-proxy.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - rentauth
+      - rentuser
+      - rentorder
+    networks:
+      - backend
+
+
+networks:
+  backend:
+    driver: bridge

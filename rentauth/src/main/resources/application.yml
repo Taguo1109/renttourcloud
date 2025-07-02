@@ -1,0 +1,15 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: rentauth
+  datasource:
+    url: jdbc:mysql://hnd1.clusters.zeabur.com:30551/go_auth?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: A2He0tlbFT9VQaid6ZUxR857EBY4f31h
+  jpa:
+    hibernate:
+      ddl-auto: none
+      database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true

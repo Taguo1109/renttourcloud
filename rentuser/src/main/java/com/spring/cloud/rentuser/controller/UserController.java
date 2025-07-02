@@ -1,5 +1,6 @@
 package com.spring.cloud.rentuser.controller;
 
+import com.spring.cloud.common.dto.JsonResponse;
 import com.spring.cloud.common.dto.UserDto;
 import com.spring.cloud.common.util.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -24,14 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
 
     @GetMapping("/profile")
-    public ResponseEntity<UserDto> getProfile(@RequestHeader("Authorization") String authHeader) {
+    public JsonResponse<UserDto> getProfile(@RequestHeader("Authorization") String authHeader) {
         log.info("呼叫用呼資訊");
         // 從 Authorization header 中提取 token
         String token = authHeader.substring(7); // "Bearer " 後面的部分
 
         // 驗證 token (這裡應該使用你的 JwtUtil)
         if (!JwtUtil.validateToken(token)) {
-            return ResponseEntity.status(401).build(); // 返回 401 如果 token 無效
+            return JsonResponse.unauthorized("token無效"); // 返回 401 如果 token 無效
         }
 
         // 從 token 中獲取使用者資訊
@@ -40,6 +41,6 @@ public class UserController {
         // 為了簡化，我們直接創建一個 UserDto 物件
         UserDto userDto = new UserDto(username, username + "@example.com");
 
-        return ResponseEntity.ok(userDto);
+        return JsonResponse.ok(userDto);
     }
 }

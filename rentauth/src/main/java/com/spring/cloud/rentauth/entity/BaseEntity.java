@@ -1,6 +1,8 @@
 package com.spring.cloud.rentauth.entity;
 
+import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 /**
@@ -13,7 +15,11 @@ import java.sql.Timestamp;
  * @Version 1.0
  */
 @Data
-public class BaseEntity {
+@MappedSuperclass
+public abstract class BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private Timestamp createdAt;
     private Timestamp updatedAt;
 }

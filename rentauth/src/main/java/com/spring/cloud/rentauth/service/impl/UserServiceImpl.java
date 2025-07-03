@@ -1,5 +1,6 @@
 package com.spring.cloud.rentauth.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.spring.cloud.common.dto.UserLoginReq;
 import com.spring.cloud.common.util.MapperUtils;
 import com.spring.cloud.rentauth.entity.UsersEntity;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean login(String email, String password) {
         UsersEntity byUsername = userRepository.findByEmail(email);
-        log.info("username is {}", byUsername.getUsername());
+        log.info("UserEntity is {}", JSON.toJSONString(byUsername, true));
         UserLoginReq map = MapperUtils.map(byUsername, UserLoginReq.class);
         log.info("map is {}", map.toString());
         return map.getPassword().equals(password) && map.getEmail().equals(email);

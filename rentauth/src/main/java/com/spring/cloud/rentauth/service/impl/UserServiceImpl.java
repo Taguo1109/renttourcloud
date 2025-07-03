@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
  */
 @Slf4j
 @Service
-class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -33,6 +33,6 @@ class UserServiceImpl implements UserService {
         log.info("username is {}", byUsername.getUsername());
         UserLoginReq map = MapperUtils.map(byUsername, UserLoginReq.class);
         log.info("map is {}", map.toString());
-        return false;
+        return map.getPassword().equals(password) && map.getEmail().equals(email);
     }
 }

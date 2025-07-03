@@ -1,8 +1,6 @@
 package com.spring.cloud.rentauth.entity;
 
-import jakarta.persistence.Entity;
 import lombok.Data;
-
 import java.sql.Timestamp;
 
 /**

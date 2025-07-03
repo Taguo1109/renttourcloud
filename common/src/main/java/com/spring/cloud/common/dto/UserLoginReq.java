@@ -1,6 +1,8 @@
 package com.spring.cloud.common.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * ClassName: com.spring.cloud.common.dto.UserLoginReq
@@ -12,6 +14,7 @@ import lombok.Data;
  * @Version 1.0
  */
 @Data
+@AllArgsConstructor
 public class UserLoginReq {
     private String email;
     private String password;

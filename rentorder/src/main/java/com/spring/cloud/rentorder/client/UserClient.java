@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
  * @Version 1.0
  */
 
-@FeignClient(name = "rentuser", url = "${user.service.url}")
+//@FeignClient(name = "rentuser", url = "http://rentuser:8083") // docker-compose 要使用這個host
+@FeignClient(name = "rentuser", url = "{user.service.url}")
 public interface UserClient {
     /**
      * 透過 Feign 呼叫 User Service 拿到當前用戶信息
